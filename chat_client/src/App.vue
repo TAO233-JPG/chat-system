@@ -11,5 +11,6 @@ import { RouterView } from 'vue-router'
 #app {
   position: relative;
   height: 100vh;
+  background-image: url('/src/assets/imgs/bg.jpg');
 }
 </style>

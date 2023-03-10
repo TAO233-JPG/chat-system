@@ -1,12 +1,20 @@
 <template>
   <div class="chatSystem">
-    <div class="personal-center">个人界面</div>
+    <div class="personal-center">
+      个人界面
+
+      <div>{{ userStore.a }}</div>
+    </div>
     <div class="chat-room-list">聊天室列表</div>
     <div class="chat-interface">聊天界面</div>
   </div>
 </template>
 
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+import useUserStore from '@/stores/user/user'
+
+const userStore = useUserStore()
+</script>
 
 <style lang="scss" scoped>
 .chatSystem {
@@ -17,7 +25,8 @@
   top: 20%;
   left: 50%;
   transform: translate(-50%, -20%);
-  background-color: rgba($color: #d74545, $alpha: 0.7);
+  background-color: rgba($color: #1d1a1a, $alpha: 0.5);
+  backdrop-filter: blur(6px);
 
   .personal-center {
     flex-grow: 0;
