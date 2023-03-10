@@ -13,6 +13,29 @@
 <script lang="ts" setup>
 import useUserStore from '@/stores/user/user'
 
+import { get, post } from '../server/methods'
+
+// const a = await get('/todos/1', {})
+// const a1 = await get('/comments', { postId: 1 })
+const a = async () => {
+  const b = await post(
+    '/posts/1/comments',
+    {
+      title: 'foo',
+      body: 'bar',
+      userId: 1
+    },
+    {
+      headers: {
+        'Content-type': 'application/json; charset=UTF-8'
+      }
+    }
+  )
+
+  console.log(b)
+}
+
+a()
 const userStore = useUserStore()
 </script>
 
