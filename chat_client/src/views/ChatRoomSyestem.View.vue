@@ -1,41 +1,18 @@
 <template>
   <div class="chatSystem">
-    <div class="personal-center">
+    <div class="personal-center-pane">
       <PersonalCenter />
     </div>
-    <div class="chat-room-list">聊天室列表</div>
-    <div class="chat-interface">聊天界面</div>
+    <div class="chat-room-list-pane">
+      <ChatRoomList />
+    </div>
+    <div class="chat-interface-pane">聊天界面</div>
   </div>
 </template>
 
 <script lang="ts" setup>
 import PersonalCenter from '@/components/PersonalCenter/PersonalCenter.vue'
-import useUserStore from '@/stores/user/user'
-
-import { get, post } from '../server/methods'
-
-// const a = await get('/todos/1', {})
-// const a1 = await get('/comments', { postId: 1 })
-const a = async () => {
-  const b = await post(
-    '/posts/1/comments',
-    {
-      title: 'foo',
-      body: 'bar',
-      userId: 1
-    },
-    {
-      headers: {
-        'Content-type': 'application/json; charset=UTF-8'
-      }
-    }
-  )
-
-  console.log(b)
-}
-
-a()
-const userStore = useUserStore()
+import ChatRoomList from '@/components/ChatRoomList/ChatRoomList.vue'
 </script>
 
 <style lang="scss" scoped>
@@ -50,16 +27,16 @@ const userStore = useUserStore()
   background-color: rgba($color: #1d1a1a, $alpha: 0.5);
   backdrop-filter: blur(6px);
 
-  .personal-center {
+  .personal-center-pane {
     flex-grow: 0;
     flex-shrink: 0;
   }
-  .chat-room-list {
+  .chat-room-list-pane {
     flex-grow: 0;
     flex-shrink: 0;
-    flex-basis: 300px;
+    flex-basis: 200px;
   }
-  .chat-interface {
+  .chat-interface-pane {
     flex: 1;
   }
 }

@@ -23,7 +23,7 @@ const circleUrl = 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1ep
   justify-content: space-between;
   height: 100%;
   width: 60px;
-  padding: 20px 8px;
+  padding: 12px 8px;
   color: var(--vt-c-white-soft);
   background-color: rgba($color: #1d1a1a, $alpha: 0.6);
 

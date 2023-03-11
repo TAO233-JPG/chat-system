@@ -4,7 +4,7 @@ export type UserT = {
   chatRooms: ChatRoomT[]
 }
 
-export type ChatRoomTypeT = 'Group' | 'Private'
+export type ChatRoomTypeT = 'Group' | 'Private' | 'Recent'
 
 export type ChatRoomT = {
   cId: string
