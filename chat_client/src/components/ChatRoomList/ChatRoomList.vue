@@ -17,8 +17,12 @@
         </li>
         <li class="full-box"></li>
       </ul>
-      <div v-for="room of list" :key="room.cId">
-        <span>{{ room.name }}</span>
+      <div class="rooms">
+        <el-scrollbar :max-height="414">
+          <div v-for="room of list" :key="room.cId">
+            <ListItem class="checked" />
+          </div>
+        </el-scrollbar>
       </div>
     </div>
   </div>
@@ -26,7 +30,8 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { Search, Notification, User, ChatDotRound } from '@element-plus/icons-vue'
-import type { ChatRoomT, ChatRoomTypeT, UserT } from '@/stores/type'
+import type { ChatRoomT, ChatRoomTypeT } from '@/stores/type'
+import ListItem from '../ListItem/ListItem.vue'
 const input = ref('')
 const roomType = ref<ChatRoomTypeT>('Group')
 
@@ -46,6 +51,42 @@ const list: ChatRoomT[] = [
     name: 'A',
     type: 'Group'
   },
+
+  {
+    cId: '12',
+    name: 'A2',
+    type: 'Group'
+  },
+  {
+    cId: '12',
+    name: 'A2',
+    type: 'Group'
+  },
+  {
+    cId: '12',
+    name: 'A2',
+    type: 'Group'
+  },
+  {
+    cId: '12',
+    name: 'A2',
+    type: 'Group'
+  },
+  {
+    cId: '12',
+    name: 'A2',
+    type: 'Group'
+  },
+  {
+    cId: '12',
+    name: 'A2',
+    type: 'Group'
+  },
+  {
+    cId: '12',
+    name: 'A2',
+    type: 'Group'
+  },
   {
     cId: '12',
     name: 'A2',
@@ -60,25 +101,24 @@ const list: ChatRoomT[] = [
 </script>
 <style lang="scss" scoped>
 .chat-room-list {
+  display: flex;
+  flex-direction: column;
   box-sizing: border-box;
   height: 100%;
   max-width: 200px;
   color: var(--vt-c-white-soft);
   box-shadow: 2px 0px 3px 0px #2d272737;
-
   .input {
     padding: 12px 8px;
+    height: 56px;
   }
   .chat-rooms {
     box-sizing: border-box;
-    padding-bottom: 10px;
     background-color: rgba($color: #2d2727, $alpha: 0.5);
-
     .roomType {
       display: flex;
       height: 30px;
       width: auto;
-      margin-bottom: 4px;
       text-align: center;
       box-sizing: content-box;
 
@@ -100,5 +140,9 @@ const list: ChatRoomT[] = [
       }
     }
   }
+}
+
+.checked {
+  background-color: rgba($color: #1d1a1a, $alpha: 0.6);
 }
 </style>
