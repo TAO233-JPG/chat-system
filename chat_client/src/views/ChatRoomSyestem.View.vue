@@ -1,9 +1,7 @@
 <template>
   <div class="chatSystem">
     <div class="personal-center">
-      个人界面
-
-      <div>{{ userStore.a }}</div>
+      <PersonalCenter />
     </div>
     <div class="chat-room-list">聊天室列表</div>
     <div class="chat-interface">聊天界面</div>
@@ -11,6 +9,7 @@
 </template>
 
 <script lang="ts" setup>
+import PersonalCenter from '@/components/PersonalCenter/PersonalCenter.vue'
 import useUserStore from '@/stores/user/user'
 
 import { get, post } from '../server/methods'
@@ -54,7 +53,6 @@ const userStore = useUserStore()
   .personal-center {
     flex-grow: 0;
     flex-shrink: 0;
-    flex-basis: 200px;
   }
   .chat-room-list {
     flex-grow: 0;

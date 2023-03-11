@@ -55,6 +55,7 @@
 *::after {
   box-sizing: border-box;
   margin: 0;
+  padding: 0;
   position: relative;
   font-weight: normal;
 }
@@ -71,4 +72,9 @@ body {
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+ul,
+li {
+  list-style: none;
 }

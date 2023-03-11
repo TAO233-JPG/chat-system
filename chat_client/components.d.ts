@@ -10,6 +10,7 @@ export {}
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
     ChatRoomList: typeof import('./src/components/ChatRoomList/ChatRoomList.vue')['default']
+    ElAvatar: typeof import('element-plus/es')['ElAvatar']
     ElButton: typeof import('element-plus/es')['ElButton']
     ElCard: typeof import('element-plus/es')['ElCard']
     IconCommunity: typeof import('./src/components/icons/IconCommunity.vue')['default']
