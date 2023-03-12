@@ -23,7 +23,7 @@ import ChatInterface from '@/components/ChatInterface/ChatInterface.vue'
   position: absolute;
   display: flex;
   width: 860px;
-  height: 500px;
+  height: 600px;
   top: 20%;
   left: 50%;
   transform: translate(-50%, -20%);
