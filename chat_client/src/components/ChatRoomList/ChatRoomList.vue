@@ -4,27 +4,27 @@
       <el-input v-model="input" size="default" placeholder="Please input" :suffix-icon="Search" />
     </div>
 
-    <div class="chat-rooms">
-      <ul class="roomType" @click="($event) => changeType($event)">
-        <li :class="{ checked: roomType === 'Recent' }" data-type="Recent">
-          <el-icon><Notification /></el-icon>
-        </li>
-        <li :class="{ checked: roomType === 'Private' }" data-type="Private">
-          <el-icon><User /></el-icon>
-        </li>
-        <li :class="{ checked: roomType === 'Group' }" data-type="Group">
-          <el-icon><ChatDotRound /></el-icon>
-        </li>
-        <li class="full-box"></li>
-      </ul>
-      <div class="rooms">
-        <el-scrollbar :max-height="414">
+    <ul class="roomType" @click="($event) => changeType($event)">
+      <li :class="{ checked: roomType === 'Recent' }" data-type="Recent">
+        <el-icon><Notification /></el-icon>
+      </li>
+      <li :class="{ checked: roomType === 'Private' }" data-type="Private">
+        <el-icon><User /></el-icon>
+      </li>
+      <li :class="{ checked: roomType === 'Group' }" data-type="Group">
+        <el-icon><ChatDotRound /></el-icon>
+      </li>
+      <li class="fill-box"></li>
+    </ul>
+    <el-scrollbar>
+      <div class="chat-rooms">
+        <div class="rooms">
           <div v-for="room of list" :key="room.cId">
             <ListItem class="checked" />
           </div>
-        </el-scrollbar>
+        </div>
       </div>
-    </div>
+    </el-scrollbar>
   </div>
 </template>
 <script setup lang="ts">
@@ -112,33 +112,34 @@ const list: ChatRoomT[] = [
     padding: 12px 8px;
     height: 56px;
   }
+  .roomType {
+    display: flex;
+    height: 30px;
+    width: auto;
+    text-align: center;
+    box-sizing: content-box;
+
+    li {
+      height: 30px;
+      width: 40px;
+      line-height: 30px;
+      background-color: #ffffff41;
+      cursor: pointer;
+    }
+    .checked {
+      box-shadow: 2px 0px 3px 0px #2d272737;
+      color: #5191fe;
+      background-color: #00000000;
+    }
+    .fill-box {
+      flex: 1;
+      cursor: default;
+    }
+  }
   .chat-rooms {
+    flex: 1;
     box-sizing: border-box;
     background-color: rgba($color: #2d2727, $alpha: 0.5);
-    .roomType {
-      display: flex;
-      height: 30px;
-      width: auto;
-      text-align: center;
-      box-sizing: content-box;
-
-      li {
-        height: 30px;
-        width: 40px;
-        line-height: 30px;
-        background-color: #ffffff41;
-        cursor: pointer;
-      }
-      .checked {
-        box-shadow: 2px 0px 3px 0px #2d272737;
-        color: #5191fe;
-        background-color: #00000000;
-      }
-      .full-box {
-        flex: 1;
-        cursor: default;
-      }
-    }
   }
 }
 
