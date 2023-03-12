@@ -6,20 +6,23 @@
     <div class="chat-room-list-pane">
       <ChatRoomList />
     </div>
-    <div class="chat-interface-pane">聊天界面</div>
+    <div class="chat-interface-pane">
+      <ChatInterface />
+    </div>
   </div>
 </template>
 
 <script lang="ts" setup>
 import PersonalCenter from '@/components/PersonalCenter/PersonalCenter.vue'
 import ChatRoomList from '@/components/ChatRoomList/ChatRoomList.vue'
+import ChatInterface from '@/components/ChatInterface/ChatInterface.vue'
 </script>
 
 <style lang="scss" scoped>
 .chatSystem {
   position: absolute;
   display: flex;
-  width: 1024px;
+  width: 860px;
   height: 500px;
   top: 20%;
   left: 50%;

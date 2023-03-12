@@ -9,6 +9,10 @@ export {}
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
+    ChatInfoDisplayArea: typeof import('./src/components/ChatInfoDisplayArea/ChatInfoDisplayArea.vue')['default']
+    ChatInterface: typeof import('./src/components/ChatInterface/ChatInterface.vue')['default']
+    ChatMessage: typeof import('./src/components/ChatMessageItem/ChatMessage.vue')['default']
+    ChatMessageItem: typeof import('./src/components/ChatMessageItem/ChatMessageItem.vue')['default']
     ChatRoomList: typeof import('./src/components/ChatRoomList/ChatRoomList.vue')['default']
     ElAvatar: typeof import('element-plus/es')['ElAvatar']
     ElButton: typeof import('element-plus/es')['ElButton']
@@ -24,6 +28,7 @@ declare module '@vue/runtime-core' {
     IconSupport: typeof import('./src/components/icons/IconSupport.vue')['default']
     IconTooling: typeof import('./src/components/icons/IconTooling.vue')['default']
     ListItem: typeof import('./src/components/ListItem/ListItem.vue')['default']
+    MessageInputBox: typeof import('./src/components/MessageInputBox/MessageInputBox.vue')['default']
     PersonalCenter: typeof import('./src/components/PersonalCenter/PersonalCenter.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
