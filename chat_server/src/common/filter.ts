@@ -16,11 +16,10 @@ export class HttpFilter implements ExceptionFilter {
 
     const status = exception.getStatus();
     const data = {
-      data: exception.message,
+      data: exception,
       success: false,
       code: responseValueCode.fail,
     };
-    console.log(111);
 
     res.status(status).json(data);
   }
