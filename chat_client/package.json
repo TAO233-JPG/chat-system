@@ -17,6 +17,7 @@
     "element-plus": "^2.2.36",
     "pinia": "^2.0.32",
     "sass": "^1.58.3",
+    "socket.io-client": "^4.6.1",
     "unplugin-auto-import": "^0.15.1",
     "unplugin-vue-components": "^0.24.1",
     "vue": "^3.2.47",
