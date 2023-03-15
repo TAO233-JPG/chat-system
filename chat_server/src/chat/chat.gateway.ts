@@ -11,8 +11,9 @@ import {
 import { Server, Socket } from 'socket.io';
 import { v4 } from 'uuid';
 import DataStore from 'src/store/store';
-import { ChatMessageDto } from './chat.dto';
-import { Dayjs } from 'dayjs';
+import { ChatMessageDto, EntryChatRoomDto } from './chat.dto';
+import * as dayjs from 'dayjs';
+import { formateData, responseTypes, WsStatus } from './chat.util';
 
 @WebSocketGateway({
   path: '/chat',
@@ -28,19 +29,22 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
   private chatRooms = this.dataStore.getAllChatRooms();
   private users = this.dataStore.getAllUsers();
 
-  async handleConnection(client: Socket, data: any) {
+  async handleConnection(client: Socket) {
     const { id } = client.handshake.auth;
     const clientId = client.id;
     const user = this.dataStore.getUser(id);
     if (!user) {
-      const a = v4();
-      client.emit('message', '用户不存在', a);
-      // client.disconnect();
+      client.emit(
+        'init',
+        formateData(responseTypes.init, { data: '用户不存在' }, WsStatus.fail),
+      );
+      client.disconnect();
       return;
     }
-    console.log(1111);
-
+    const chatRooms = this.dataStore.getUserChatRooms(id);
     this.dataStore.setClientId(id, clientId);
+    client.join(chatRooms.map((v) => v.id));
+    client.emit('init', formateData(responseTypes.init, { user, chatRooms }));
   }
 
   /**
@@ -48,51 +52,47 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
    */
   handleDisconnect(client: Socket) {
     const { id } = client.handshake.auth;
-    console.log('disconnect', client.handshake.auth, client.id);
     this.dataStore.setClientId(id, undefined);
   }
 
-  @SubscribeMessage('message')
-  handleEvent(
-    @MessageBody() data: ChatMessageDto,
-    @ConnectedSocket() client: Socket,
-  ) {
-    client.emit('message', data);
-    console.log(data);
-
-    return;
-  }
-
-  @SubscribeMessage('sendMessage')
+  @SubscribeMessage(responseTypes.sendMessage)
   handleSendMessage(
     @MessageBody() data: ChatMessageDto,
     @ConnectedSocket() client: Socket,
   ) {
-    client.emit('message', data, client.handshake.auth, client.id);
     this.sendMessage(client, data);
   }
 
   sendMessage(client: Socket, data: ChatMessageDto) {
     const { roomId, sender } = data;
-    const { message, useId } = sender;
-    const usersObj = this.dataStore.getChatRoomUsers(roomId);
+    const { message, id } = sender;
+
     const chatRecord = this.dataStore.saveChatRecord(roomId, {
       id: v4(),
-      senderId: useId,
-      senderName: this.users[useId].name,
+      senderId: id,
+      senderName: this.users[id].name,
       content: message,
-      date: new Dayjs(),
+      date: dayjs(),
     });
-    Object.values(usersObj).forEach((user) => {
-      if (user.clientId) {
-        client.to(user.clientId).emit('message', chatRecord);
-      }
-    });
+
+    this.ws
+      .to(roomId)
+      .emit(
+        responseTypes.sendMessage,
+        formateData(responseTypes.sendMessage, chatRecord),
+      );
   }
 
-  @SubscribeMessage('name')
-  handleName(client: Socket, data: any): void {
-    this.users[client.id] = data;
-    client.emit('name', this.users[client.id]);
+  @SubscribeMessage(responseTypes.getRecord)
+  handleEntryChatRoom(
+    @MessageBody() data: EntryChatRoomDto,
+    @ConnectedSocket() client: Socket,
+  ): void {
+    const { roomId } = data;
+    const record = this.dataStore.getChatRecord(roomId);
+    client.emit(
+      responseTypes.getRecord,
+      formateData(responseTypes.getRecord, record),
+    );
   }
 }

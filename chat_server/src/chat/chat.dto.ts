@@ -1,7 +1,7 @@
 import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
 
 export class SenderDto {
-  useId: string;
+  id: string;
   message: string;
 }
 
@@ -10,4 +10,8 @@ export class ChatMessageDto {
   @IsString()
   roomId: string;
   sender: SenderDto;
+}
+
+export class EntryChatRoomDto {
+  roomId: string;
 }
