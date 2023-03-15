@@ -1,11 +1,18 @@
+import { UseInterceptors } from '@nestjs/common';
 import {
   OnGatewayConnection,
   SubscribeMessage,
   WebSocketGateway,
   OnGatewayDisconnect,
   WebSocketServer,
+  MessageBody,
+  ConnectedSocket,
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
+import { v4 } from 'uuid';
+import DataStore from 'src/store/store';
+import { ChatMessageDto } from './chat.dto';
+import { Dayjs } from 'dayjs';
 
 @WebSocketGateway({
   path: '/chat',
@@ -17,48 +24,70 @@ import { Server, Socket } from 'socket.io';
 })
 export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @WebSocketServer() private ws: Server; // socket实例
-  private connectCounts = 0; // 当前在线人数
-  private allNum = 0; // 全部在线人数
-  private users: any = {}; // 人数信息
+  private dataStore = DataStore.getInstance();
+  private chatRooms = this.dataStore.getAllChatRooms();
+  private users = this.dataStore.getAllUsers();
 
-  /**
-   * 链接成功
-   */
-  handleConnection(client: Socket) {
-    this.connectCounts += 1;
-    this.allNum += 1;
-    this.users[client.id] = `user-${this.connectCounts}`;
-    console.log('HHHHHHHHH');
+  async handleConnection(client: Socket, data: any) {
+    const { id } = client.handshake.auth;
+    const clientId = client.id;
+    const user = this.dataStore.getUser(id);
+    if (!user) {
+      const a = v4();
+      client.emit('message', '用户不存在', a);
+      // client.disconnect();
+      return;
+    }
+    console.log(1111);
 
-    this.ws.emit('enter', {
-      name: this.users[client.id],
-      allNum: this.allNum,
-      connectCounts: this.connectCounts,
-    });
-    client.emit('enterName', this.users[client.id]);
+    this.dataStore.setClientId(id, clientId);
   }
 
   /**
    * 断开链接
    */
   handleDisconnect(client: Socket) {
-    this.allNum -= 1;
-    this.ws.emit('leave', {
-      name: this.users[client.id],
-      allNum: this.allNum,
-      connectCounts: this.connectCounts,
-    });
+    const { id } = client.handshake.auth;
+    console.log('disconnect', client.handshake.auth, client.id);
+    this.dataStore.setClientId(id, undefined);
   }
 
   @SubscribeMessage('message')
-  handleMessage(client: Socket, data: any): void {
-    console.log('message 收到', data);
+  handleEvent(
+    @MessageBody() data: ChatMessageDto,
+    @ConnectedSocket() client: Socket,
+  ) {
+    client.emit('message', data);
+    console.log(data);
 
-    this.ws.emit('message', {
-      name: this.users[client.id],
-      say: data,
+    return;
+  }
+
+  @SubscribeMessage('sendMessage')
+  handleSendMessage(
+    @MessageBody() data: ChatMessageDto,
+    @ConnectedSocket() client: Socket,
+  ) {
+    client.emit('message', data, client.handshake.auth, client.id);
+    this.sendMessage(client, data);
+  }
+
+  sendMessage(client: Socket, data: ChatMessageDto) {
+    const { roomId, sender } = data;
+    const { message, useId } = sender;
+    const usersObj = this.dataStore.getChatRoomUsers(roomId);
+    const chatRecord = this.dataStore.saveChatRecord(roomId, {
+      id: v4(),
+      senderId: useId,
+      senderName: this.users[useId].name,
+      content: message,
+      date: new Dayjs(),
     });
-    client.emit('message', { msg: `私密，${client.id}` });
+    Object.values(usersObj).forEach((user) => {
+      if (user.clientId) {
+        client.to(user.clientId).emit('message', chatRecord);
+      }
+    });
   }
 
   @SubscribeMessage('name')
