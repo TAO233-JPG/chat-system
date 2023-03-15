@@ -4,6 +4,14 @@ export class CreateUserDto {
   @IsNotEmpty()
   @IsString()
   name: string;
-  @IsNumber()
-  age: number;
+  @IsString()
+  password: string;
+}
+
+export class LoginDto {
+  @IsNotEmpty()
+  @IsString()
+  name: string;
+  @IsString()
+  password: string;
 }

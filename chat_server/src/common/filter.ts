@@ -16,7 +16,7 @@ export class HttpFilter implements ExceptionFilter {
 
     const status = exception.getStatus();
     const data = {
-      data: exception,
+      data: exception.message,
       success: false,
       code: responseValueCode.fail,
     };
