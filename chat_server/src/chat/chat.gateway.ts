@@ -1,4 +1,3 @@
-import { UseInterceptors } from '@nestjs/common';
 import {
   OnGatewayConnection,
   SubscribeMessage,
@@ -10,10 +9,10 @@ import {
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 import { v4 } from 'uuid';
-import DataStore from 'src/store/store';
-import { ChatMessageDto, EntryChatRoomDto } from './chat.dto';
 import * as dayjs from 'dayjs';
 import { formateData, responseTypes, WsStatus } from './chat.util';
+import { store } from 'src/store';
+import { ChatMessageDto, EntryChatRoomDto } from './chat.dto';
 
 @WebSocketGateway({
   path: '/chat',
@@ -25,8 +24,7 @@ import { formateData, responseTypes, WsStatus } from './chat.util';
 })
 export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @WebSocketServer() private ws: Server; // socket实例
-  private dataStore = DataStore.getInstance();
-  private chatRooms = this.dataStore.getAllChatRooms();
+  private dataStore = store;
   private users = this.dataStore.getAllUsers();
 
   async handleConnection(client: Socket) {
