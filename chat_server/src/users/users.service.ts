@@ -19,14 +19,14 @@ export class UsersService {
       console.log(111);
       throw new HttpException(res, HttpStatus.BAD_REQUEST);
     }
-    return res;
+    return user;
   }
 
   login(loginDto: LoginDto) {
     const { name, password } = loginDto;
     const user = store.getUser(name);
     if (user && user.password === password) {
-      return '登录成功';
+      return user;
     }
 
     throw new HttpException('密码错误', HttpStatus.BAD_REQUEST);

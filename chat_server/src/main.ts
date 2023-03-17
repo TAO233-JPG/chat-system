@@ -7,7 +7,7 @@ import { Response } from './common/reponse';
 import { UserGuard } from './users/users.guard';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, { cors: true });
   app.useGlobalInterceptors(new Response());
 
   app.useGlobalFilters(new HttpFilter());
