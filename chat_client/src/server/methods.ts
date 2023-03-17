@@ -9,11 +9,11 @@ export const get = async <T>(url: string, params: AnyObjT): Promise<Awaited<T>> 
   return res.data as Promise<Awaited<T>>
 }
 
-export const post = async <T>(
-  url: string,
-  data: AnyObjT,
-  params: AnyObjT = {}
-): Promise<Awaited<T>> => {
-  const res = await server.post(url, data, { ...params })
+export const postByJson = async <T>(url: string, data: AnyObjT): Promise<Awaited<T>> => {
+  const res = await server.post(url, data, {
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  })
   return res.data as Promise<Awaited<T>>
 }
