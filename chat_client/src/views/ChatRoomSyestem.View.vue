@@ -6,7 +6,7 @@
     <div class="chat-room-list-pane">
       <ChatRoomList />
     </div>
-    <div class="chat-interface-pane" @click="fn">
+    <div class="chat-interface-pane">
       <ChatInterface />
     </div>
   </div>
@@ -16,40 +16,37 @@
 import PersonalCenter from '@/components/PersonalCenter/PersonalCenter.vue'
 import ChatRoomList from '@/components/ChatRoomList/ChatRoomList.vue'
 import ChatInterface from '@/components/ChatInterface/ChatInterface.vue'
-import { useRoute } from 'vue-router'
-import io from 'socket.io-client'
+import { useRouter } from 'vue-router'
+import useUserStore from '@/stores/user/user'
+import Chat from '@/server/ws/chat'
+import type { IinitData, Imessage, IgetRecordData } from '@/stores/type'
+const userStore = useUserStore()
+const router = useRouter()
+const id = userStore.user?.id!
+const chat = Chat.getInstance(id)
+chat.connect()
 
-const route = useRoute()
-console.log(route.params)
-
-let chat = io('http://localhost:3000', {
-  path: '/chat',
-  auth: {
-    id: route.params.id
+chat.listenEvent<IinitData>('init', (data) => {
+  if (data?.status === 'fail') {
+    chat.close()
+    router.replace('/')
+    return
   }
+  console.log(data, 'init')
+  userStore.setChatRooms(data.data.chatRooms)
 })
-chat.on('init', (...arg: any[]) => {
-  console.log('init/收到消息', arg)
-})
-chat.on('sendMessage', (...arg: any[]) => {
-  console.log('sendMessage/收到消息', arg)
-})
-chat.on('entryChatRoom', (...arg: any[]) => {
-  console.log('entryChatRoom/获取消息', arg)
-})
+chat.listenEvent<IgetRecordData>('getRecord', (data) => {
+  const { record, roomId } = data.data
+  console.log('getRe', record)
 
-const fn = () => {
-  console.log('aaa')
-
-  chat.emit('sendMessage', {
-    roomId: 'chatRoom-1',
-    sender: { id: route.params.id, name: 'mkii', message: '123456' }
-  })
-
-  setTimeout(() => {
-    chat.emit('entryChatRoom', { roomId: 'chatRoom-1' })
-  }, 3000)
-}
+  userStore.setChatRoomRecord(roomId, record)
+})
+chat.listenEvent<IgetRecordData>('sendMessage', (data) => {
+  // const { record, roomId } = data.data
+  // userStore.setChatRoomRecord(roomId, record)
+  console.log(data, 'sendMessage')
+  chat.emitEvent('getRecord', { roomId: userStore.currentChatRoom?.id })
+})
 </script>
 
 <style lang="scss" scoped>

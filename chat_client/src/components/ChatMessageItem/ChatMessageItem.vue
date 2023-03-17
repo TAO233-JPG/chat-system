@@ -1,52 +1,26 @@
 <template>
-  <div class="message">
+  <div :class="{ 'right-message': item.senderId == id, message: true }">
     <div class="message-detail">
       <el-avatar :size="25" :src="url" />
       <div class="name">
-        Nameddawdw
-        <span class="date">info-time</span>
+        {{ item.senderName }}
+        <span class="date">{{ item.date }}</span>
       </div>
     </div>
 
-    <div class="message-content">消息内容消息内容消息内容消息内容消息内容消息内容消息内容消息内容消息内容消息内容消息内容消息内容</div>
-  </div>
-  <div class="message right-message">
-    <div class="message-detail">
-      <el-avatar :size="25" :src="url" />
-      <div class="name">
-        Nameddawdw
-        <span class="date">info-time</span>
-      </div>
+    <div class="message-content">
+      {{ item.content }}
     </div>
-
-    <div class="message-content">消息内容消息内容消息内容消息内容消息内容消息内容消息内容消息内容消息内容消息内容消息内容消息内容</div>
-  </div>
-
-  <div class="message">
-    <div class="message-detail">
-      <el-avatar :size="25" :src="url" />
-      <div class="name">
-        Nameddawdw
-        <span class="date">info-time</span>
-      </div>
-    </div>
-
-    <div class="message-content">消息内容消息内容消息内容消息内容消息内容消息内容消息内容消息内容消息内容消息内容消息内容消息内容</div>
-  </div>
-  <div class="message">
-    <div class="message-detail">
-      <el-avatar :size="25" :src="url" />
-      <div class="name">
-        Nameddawdw
-        <span class="date">info-time</span>
-      </div>
-    </div>
-
-    <div class="message-content">消息内容消息内容消息内容消息内容消息内容消息内容消息内容消息内容消息内容消息内容消息内容消息内容</div>
   </div>
 </template>
 <script setup lang="ts">
+import type { Imessage } from '@/stores/type'
+import useUserStore from '@/stores/user/user'
+
 const url = 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png'
+defineProps<{ item: Imessage }>()
+const userStore = useUserStore()
+const id = userStore.user?.id
 </script>
 <style lang="scss" scoped>
 .message {

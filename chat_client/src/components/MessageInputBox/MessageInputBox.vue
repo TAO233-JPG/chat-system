@@ -6,12 +6,39 @@
     :autosize="{ minRows: 2, maxRows: 6 }"
     resize="none"
     placeholder="Please input"
+    @keydown.shift.enter="send"
   />
 </template>
 <script setup lang="ts">
 import { ref } from 'vue'
-
+import Chat from '@/server/ws/chat'
+import useUserStore from '@/stores/user/user'
+const chat = Chat.getInstance()
+const userStore = useUserStore()
 const textarea = ref('')
+interface Isender {
+  id: string
+  message: string
+}
+interface IsendMessage {
+  roomId: string
+  sender: Isender
+}
+
+const send = () => {
+  const id = userStore.user?.id!
+  const roomId = userStore.currentChatRoom?.id!
+  const data = {
+    roomId,
+    sender: {
+      id,
+      message: textarea.value
+    }
+  }
+  console.log(data)
+
+  chat.emitEvent<IsendMessage>('sendMessage', data)
+}
 </script>
 <style lang="scss" scoped>
 :deep(.el-textarea__inner) {

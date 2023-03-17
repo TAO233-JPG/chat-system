@@ -6,15 +6,33 @@ export type UserT = {
 
 export type ChatRoomTypeT = 'Group' | 'Private' | 'Recent'
 
-export type ChatRoomT = {
-  cId: string
-  name: string
-  type: ChatRoomTypeT
+// export interface Imessage {
+//   roomId: string
+//   sender: { id: string; name: string; message: string }
+// }
+
+export interface Imessage {
+  id: string
+  content: string
+  date: any
+  senderId: string
+  senderName: string
+  // chatRoomId: string;
 }
 
-export type MessageT = {
-  uId: string
+export interface IChatRoom {
+  id: string
   name: string
-  messageContent: string
-  sendingTime?: Date // TODO: 时间类型需要修改
+  roomType: ChatRoomTypeT
+  users: UserT[]
+  chatRecord: Imessage[]
+}
+
+export interface IinitData {
+  chatRooms: IChatRoom[]
+}
+
+export interface IgetRecordData {
+  record: Imessage[]
+  roomId: string
 }

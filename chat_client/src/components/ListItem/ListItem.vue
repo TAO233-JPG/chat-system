@@ -2,16 +2,19 @@
   <div class="list-item">
     <el-avatar :size="30" :src="url" />
     <div class="info-detial">
-      <span class="name">WLL</span>
-      <p class="message">hello world</p>
+      <span class="name">{{ item.name }}</span>
+      <p class="message">{{ item.message || 'XXXXXX' }}</p>
     </div>
     <div class="info-time">
-      <p>昨天 12:22</p>
+      <p>{{ item.date || ' 7:40 ' }}</p>
     </div>
   </div>
 </template>
 <script setup lang="ts">
 const url = 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png'
+const prop = defineProps<{
+  item: { id: string; name: string; message?: string; date?: string }
+}>()
 </script>
 <style lang="scss" scoped>
 .list-item {
@@ -21,6 +24,11 @@ const url = 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png
   font-size: 12px;
   align-items: center;
   padding: 10px 8px;
+  cursor: pointer;
+  &:hover {
+    background-color: #1d1a1a;
+  
+  }
 
   .info-detial {
     display: inline-block;
@@ -39,7 +47,7 @@ const url = 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png
 
   .info-time {
     display: inline-block;
-
+    text-align: right;
     width: 65px;
     align-self: flex-end;
   }

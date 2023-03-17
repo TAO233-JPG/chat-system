@@ -4,14 +4,14 @@
       <el-input v-model="input" size="default" placeholder="Please input" :suffix-icon="Search" />
     </div>
 
-    <ul class="roomType" @click="($event) => changeType($event)">
-      <li :class="{ checked: roomType === 'Recent' }" data-type="Recent">
+    <ul v-if="false" class="roomType" @click="($event) => changeType($event)">
+      <li :class="{ selected: roomType === 'Recent' }" data-type="Recent">
         <el-icon><Notification /></el-icon>
       </li>
-      <li :class="{ checked: roomType === 'Private' }" data-type="Private">
+      <li :class="{ selected: roomType === 'Private' }" data-type="Private">
         <el-icon><User /></el-icon>
       </li>
-      <li :class="{ checked: roomType === 'Group' }" data-type="Group">
+      <li :class="{ selected: roomType === 'Group' }" data-type="Group">
         <el-icon><ChatDotRound /></el-icon>
       </li>
       <li class="fill-box"></li>
@@ -19,8 +19,8 @@
     <el-scrollbar>
       <div class="chat-rooms">
         <div class="rooms">
-          <div v-for="room of list" :key="room.cId">
-            <ListItem class="checked" />
+          <div v-for="room of list" :key="room.id" @click="() => handleClickListItem(room.id)">
+            <ListItem :item="room" :class="{ checked: currentChatRoomId === room.id }" />
           </div>
         </div>
       </div>
@@ -28,13 +28,18 @@
   </div>
 </template>
 <script setup lang="ts">
-import { ref } from 'vue'
-import { Search, Notification, User, ChatDotRound } from '@element-plus/icons-vue'
-import type { ChatRoomT, ChatRoomTypeT } from '@/stores/type'
 import ListItem from '../ListItem/ListItem.vue'
-const input = ref('')
-const roomType = ref<ChatRoomTypeT>('Group')
+import { Search, Notification, User, ChatDotRound } from '@element-plus/icons-vue'
+import { computed, ref } from 'vue'
+import type { ChatRoomTypeT } from '@/stores/type'
+import useUserStore from '@/stores/user/user'
+import Chat from '@/server/ws/chat'
+const chat = Chat.getInstance()
+const userStore = useUserStore()
 
+const input = ref('')
+
+const roomType = ref<ChatRoomTypeT>('Group')
 function changeType(e: MouseEvent): void {
   let target = e.target as HTMLElement
 
@@ -45,59 +50,18 @@ function changeType(e: MouseEvent): void {
 
   roomType.value = target.dataset.type as ChatRoomTypeT
 }
-const list: ChatRoomT[] = [
-  {
-    cId: '1',
-    name: 'A',
-    type: 'Group'
-  },
 
-  {
-    cId: '12',
-    name: 'A2',
-    type: 'Group'
-  },
-  {
-    cId: '12',
-    name: 'A2',
-    type: 'Group'
-  },
-  {
-    cId: '12',
-    name: 'A2',
-    type: 'Group'
-  },
-  {
-    cId: '12',
-    name: 'A2',
-    type: 'Group'
-  },
-  {
-    cId: '12',
-    name: 'A2',
-    type: 'Group'
-  },
-  {
-    cId: '12',
-    name: 'A2',
-    type: 'Group'
-  },
-  {
-    cId: '12',
-    name: 'A2',
-    type: 'Group'
-  },
-  {
-    cId: '12',
-    name: 'A2',
-    type: 'Group'
-  },
-  {
-    cId: '123',
-    name: 'A23',
-    type: 'Group'
-  }
-]
+const list = computed(() => {
+  return userStore.chatRooms
+})
+const currentChatRoomId = computed(() => {
+  return userStore.currentChatRoom?.id
+})
+
+const handleClickListItem = (id: string) => {
+  userStore.setCurrnetChatRoom(id)
+  chat.emitEvent('getRecord', { roomId: id })
+}
 </script>
 <style lang="scss" scoped>
 .chat-room-list {
@@ -126,7 +90,7 @@ const list: ChatRoomT[] = [
       background-color: #ffffff41;
       cursor: pointer;
     }
-    .checked {
+    .selected {
       box-shadow: 2px 0px 3px 0px #2d272737;
       color: #5191fe;
       background-color: #00000000;
