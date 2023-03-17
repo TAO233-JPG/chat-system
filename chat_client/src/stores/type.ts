@@ -1,7 +1,7 @@
 export type UserT = {
-  username: string
-  uId: string
-  chatRooms: ChatRoomT[]
+  name: string
+  id: string
+  chatRoomId: string[]
 }
 
 export type ChatRoomTypeT = 'Group' | 'Private' | 'Recent'

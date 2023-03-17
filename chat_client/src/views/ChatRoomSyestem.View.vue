@@ -6,7 +6,7 @@
     <div class="chat-room-list-pane">
       <ChatRoomList />
     </div>
-    <div class="chat-interface-pane">
+    <div class="chat-interface-pane" @click="fn">
       <ChatInterface />
     </div>
   </div>
@@ -16,6 +16,40 @@
 import PersonalCenter from '@/components/PersonalCenter/PersonalCenter.vue'
 import ChatRoomList from '@/components/ChatRoomList/ChatRoomList.vue'
 import ChatInterface from '@/components/ChatInterface/ChatInterface.vue'
+import { useRoute } from 'vue-router'
+import io from 'socket.io-client'
+
+const route = useRoute()
+console.log(route.params)
+
+let chat = io('http://localhost:3000', {
+  path: '/chat',
+  auth: {
+    id: route.params.id
+  }
+})
+chat.on('init', (...arg: any[]) => {
+  console.log('init/收到消息', arg)
+})
+chat.on('sendMessage', (...arg: any[]) => {
+  console.log('sendMessage/收到消息', arg)
+})
+chat.on('entryChatRoom', (...arg: any[]) => {
+  console.log('entryChatRoom/获取消息', arg)
+})
+
+const fn = () => {
+  console.log('aaa')
+
+  chat.emit('sendMessage', {
+    roomId: 'chatRoom-1',
+    sender: { id: route.params.id, name: 'mkii', message: '123456' }
+  })
+
+  setTimeout(() => {
+    chat.emit('entryChatRoom', { roomId: 'chatRoom-1' })
+  }, 3000)
+}
 </script>
 
 <style lang="scss" scoped>
