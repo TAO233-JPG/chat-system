@@ -13,7 +13,7 @@
             type="primary"
             :disabled="item.joined"
             plain
-            @click.stop="() => add(item)"
+            @click.stop="() => handleJoinChatRoom(item)"
             size="small"
             >{{ item.joined ? '已加入' : '加入' }}</el-button
           >
@@ -57,8 +57,10 @@ const queryResults = async (params: string) => {
   return res
 }
 
-const add = (item: ListItem) => {
-  console.log(item)
+const handleJoinChatRoom = async (item: ListItem) => {
+  const { roomId } = item
+  const id = userStore.user?.id
+  await api.postByJson('/user/joinRoom', { roomId, uid: id })
 }
 
 const handleCreateChatRoom = () => {
