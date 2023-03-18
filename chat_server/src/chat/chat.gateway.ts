@@ -71,7 +71,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
       senderId: id,
       senderName: this.users[id].name,
       content: message,
-      date: dayjs(),
+      date: dayjs().format('M/D H:m'),
     });
     console.log('---0-');
 
