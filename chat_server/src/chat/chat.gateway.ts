@@ -27,7 +27,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
   private dataStore = store;
   private users = this.dataStore.getAllUsers();
 
-  async handleConnection(client: Socket) {
+  handleConnection(client: Socket) {
     const { id } = client.handshake.auth;
     const clientId = client.id;
     const user = this.dataStore.getUser(id);
