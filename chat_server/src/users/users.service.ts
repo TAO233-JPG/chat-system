@@ -3,6 +3,7 @@ import { v4 } from 'uuid';
 import {
   CreateChatRoomDto,
   CreateUserDto,
+  JoinChatRoomDto,
   LoginDto,
 } from './dto/create-user.dto';
 import { store } from 'src/store';
@@ -64,5 +65,12 @@ export class UsersService {
     };
     store.createChatRoom(chatRoom, uid);
     return chatRoom;
+  }
+
+  joinChatRoom(param: JoinChatRoomDto) {
+    const { roomId, uid } = param;
+    const user = store.getUser(uid);
+    const res = store.addUserToChatRoom(user, roomId);
+    return res;
   }
 }

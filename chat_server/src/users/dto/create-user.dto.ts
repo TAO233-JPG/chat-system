@@ -20,3 +20,7 @@ export class CreateChatRoomDto {
   name: string;
   uid: string;
 }
+export class JoinChatRoomDto {
+  roomId: string;
+  uid: string;
+}

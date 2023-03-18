@@ -3,6 +3,7 @@ import { UsersService } from './users.service';
 import {
   CreateChatRoomDto,
   CreateUserDto,
+  JoinChatRoomDto,
   LoginDto,
 } from './dto/create-user.dto';
 import { ChatGateway } from 'src/chat/chat.gateway';
@@ -33,6 +34,12 @@ export class UsersController {
   createChatRoom(@Body() createChatRoom: CreateChatRoomDto) {
     const res = this.usersService.createChatRoom(createChatRoom);
     this.chatGateWay.updateChatRooms(createChatRoom.uid);
+    return res;
+  }
+  @Post('joinRoom')
+  joinChatRoom(@Body() joinChatRoom: JoinChatRoomDto) {
+    const res = this.usersService.joinChatRoom(joinChatRoom);
+    this.chatGateWay.updateChatRooms(joinChatRoom.uid);
     return res;
   }
 }
