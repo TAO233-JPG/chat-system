@@ -32,7 +32,29 @@ export const store = DataStore.getInstance({
         u1,
         u2,
       },
-      chatRecord: [],
+      chatRecord: [
+        {
+          id: '20a88204-103e-4b84-b6c4-ef1668889219',
+          senderId: 'u2',
+          senderName: 'user-2',
+          content: '1122\n',
+          date: '2023-03-18T04:53:19.583Z',
+        },
+        {
+          id: 'd2e8f249-c57e-46c1-ad5b-b03c9a20d2d9',
+          senderId: 'u2',
+          senderName: 'user-2',
+          content: '1122\n\n大王的',
+          date: '2023-03-18T04:53:22.625Z',
+        },
+        {
+          id: 'aa5403ee-909a-4d9e-955c-207e7993a2ea',
+          senderId: 'u2',
+          senderName: 'user-2',
+          content: '1122\n\n大王的\n你好好',
+          date: '2023-03-18T04:53:25.858Z',
+        },
+      ],
       roomType: RoomType.Group,
     },
     'chatRoom-2': {

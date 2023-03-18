@@ -1,14 +1,10 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Param,
-  Delete,
-  Query,
-} from '@nestjs/common';
+import { Controller, Get, Post, Body, Query } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { CreateUserDto, LoginDto } from './dto/create-user.dto';
+import {
+  CreateChatRoomDto,
+  CreateUserDto,
+  LoginDto,
+} from './dto/create-user.dto';
 
 @Controller('/user')
 export class UsersController {
@@ -28,5 +24,9 @@ export class UsersController {
   @Get('chatRooms')
   findChatRooms(@Query('id') id: string, @Query('roomName') name: string) {
     return this.usersService.findChatRooms(id, name);
+  }
+  @Post('chatRoom')
+  createChatRoom(@Body() createChatRoom: CreateChatRoomDto) {
+    return this.usersService.createChatRoom(createChatRoom);
   }
 }

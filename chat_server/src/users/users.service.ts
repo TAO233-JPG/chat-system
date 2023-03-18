@@ -1,7 +1,12 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { CreateUserDto, LoginDto } from './dto/create-user.dto';
+import {
+  CreateChatRoomDto,
+  CreateUserDto,
+  LoginDto,
+} from './dto/create-user.dto';
 import { store } from 'src/store';
-import { Iuser } from 'src/store/type';
+import { IchatRoom, Iuser, RoomType } from 'src/store/type';
+import { v4 } from 'uuid';
 @Injectable()
 export class UsersService {
   create(createUserDto: CreateUserDto) {
@@ -45,5 +50,19 @@ export class UsersService {
         return { roomId: room.id, name: room.name, joined };
       });
     return chatRoomsList;
+  }
+
+  createChatRoom(room: CreateChatRoomDto) {
+    const { name, uid } = room;
+    const id = v4();
+    const chatRoom: IchatRoom = {
+      id,
+      chatRecord: [],
+      users: {},
+      name,
+      roomType: RoomType.Group,
+    };
+    store.createChatRoom(chatRoom, uid);
+    return chatRoom;
   }
 }

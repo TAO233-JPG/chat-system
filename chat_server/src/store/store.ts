@@ -39,10 +39,10 @@ export default class DataStore {
     if (!chatRooms[roomId]) {
       return '聊天室不存在';
     }
-    if (!chatRooms[roomId][user.id]) {
+    if (chatRooms[roomId].users[user.id]) {
       return '用户已存在';
     }
-    chatRooms[roomId][user.id] = user;
+    chatRooms[roomId].users[user.id] = user;
     users[user.id].chatRoomId.push(roomId);
   }
 
@@ -89,6 +89,11 @@ export default class DataStore {
 
   getChatRoomUsers(roomId: string) {
     return this.data.chatRooms[roomId].users;
+  }
+  createChatRoom(room: IchatRoom, uid: string) {
+    this.data.chatRooms[room.id] = room;
+    const user = this.getUser(uid);
+    this.addUserToChatRoom(user, room.id);
   }
 
   // 保存聊天记录

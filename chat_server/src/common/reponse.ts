@@ -15,8 +15,6 @@ export class Response<T = any> implements NestInterceptor {
   ): Observable<IResponseValue<T>> {
     return next.handle().pipe(
       map((data) => {
-        console.log('Response-data', data);
-
         return {
           data,
           code: responseValueCode.success,

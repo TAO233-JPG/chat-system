@@ -15,3 +15,8 @@ export class LoginDto {
   @IsString()
   password: string;
 }
+
+export class CreateChatRoomDto {
+  name: string;
+  uid: string;
+}
