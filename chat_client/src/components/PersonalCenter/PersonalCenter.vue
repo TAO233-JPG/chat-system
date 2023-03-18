@@ -5,14 +5,21 @@
       <span class="name">乌拉啦</span>
     </div>
     <ul class="person-options">
-      <li>3</li>
-      <li>3</li>
-      <li>3</li>
+      <el-button type="danger" @click="handleLogout" :icon="SwitchButton" circle />
     </ul>
   </div>
 </template>
 <script setup lang="ts">
+import Chat from '@/server/ws/chat'
+import { SwitchButton } from '@element-plus/icons-vue'
+import { useRouter } from 'vue-router'
 const circleUrl = 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png'
+const chat = Chat.getInstance()
+const router = useRouter()
+const handleLogout = () => {
+  chat.close()
+  router.replace('/')
+}
 </script>
 <style lang="scss" scoped>
 .person-center {
