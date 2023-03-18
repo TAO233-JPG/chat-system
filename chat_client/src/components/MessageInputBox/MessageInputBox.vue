@@ -6,7 +6,7 @@
     :autosize="{ minRows: 2, maxRows: 6 }"
     resize="none"
     placeholder="Please input"
-    @keydown.shift.enter="send"
+    @keydown.enter.shift.prevent="send"
   />
 </template>
 <script setup lang="ts">
@@ -36,8 +36,8 @@ const send = () => {
     }
   }
   console.log(data)
-
   chat.emitEvent<IsendMessage>('sendMessage', data)
+  textarea.value = ''
 }
 </script>
 <style lang="scss" scoped>
