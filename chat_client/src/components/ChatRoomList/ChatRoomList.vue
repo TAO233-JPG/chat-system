@@ -1,7 +1,8 @@
 <template>
   <div class="chat-room-list">
     <div class="input">
-      <el-input v-model="input" size="default" placeholder="Please input" :suffix-icon="Search" />
+      <!-- <el-input v-model="input" size="default" placeholder="Please input" :suffix-icon="Search" /> -->
+      <SearchInputBox />
     </div>
 
     <ul v-if="false" class="roomType" @click="($event) => changeType($event)">
@@ -29,6 +30,7 @@
 </template>
 <script setup lang="ts">
 import ListItem from '../ListItem/ListItem.vue'
+import SearchInputBox from '../SearchInputBox/SearchInputBox.vue'
 import { Search, Notification, User, ChatDotRound } from '@element-plus/icons-vue'
 import { computed, ref } from 'vue'
 import type { ChatRoomTypeT } from '@/stores/type'
