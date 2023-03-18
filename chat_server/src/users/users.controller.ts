@@ -5,10 +5,14 @@ import {
   CreateUserDto,
   LoginDto,
 } from './dto/create-user.dto';
+import { ChatGateway } from 'src/chat/chat.gateway';
 
 @Controller('/user')
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(
+    private readonly usersService: UsersService,
+    private readonly chatGateWay: ChatGateway,
+  ) {}
 
   @Post('signup')
   create(@Body() createUserDto: CreateUserDto) {
@@ -17,8 +21,8 @@ export class UsersController {
     return this.usersService.create(createUserDto);
   }
   @Post()
-  login(@Body() LoginDto: LoginDto) {
-    return this.usersService.login(LoginDto);
+  login(@Body() loginDto: LoginDto) {
+    return this.usersService.login(loginDto);
   }
 
   @Get('chatRooms')
@@ -27,6 +31,8 @@ export class UsersController {
   }
   @Post('chatRoom')
   createChatRoom(@Body() createChatRoom: CreateChatRoomDto) {
-    return this.usersService.createChatRoom(createChatRoom);
+    const res = this.usersService.createChatRoom(createChatRoom);
+    this.chatGateWay.updateChatRooms(createChatRoom.uid);
+    return res;
   }
 }

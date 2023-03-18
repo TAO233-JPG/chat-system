@@ -1,4 +1,5 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { v4 } from 'uuid';
 import {
   CreateChatRoomDto,
   CreateUserDto,
@@ -6,7 +7,6 @@ import {
 } from './dto/create-user.dto';
 import { store } from 'src/store';
 import { IchatRoom, Iuser, RoomType } from 'src/store/type';
-import { v4 } from 'uuid';
 @Injectable()
 export class UsersService {
   create(createUserDto: CreateUserDto) {

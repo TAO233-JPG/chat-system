@@ -61,6 +61,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
     this.sendMessage(client, data);
   }
 
+  // 聊天发送消息
   sendMessage(client: Socket, data: ChatMessageDto) {
     const { roomId, sender } = data;
     const { message, id } = sender;
@@ -79,6 +80,16 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
         responseTypes.sendMessage,
         formateData(responseTypes.sendMessage, chatRecord),
       );
+  }
+
+  updateChatRooms(uid: string) {
+    const user = this.dataStore.getUser(uid);
+    const clientId = user.clientId;
+    const chatRooms = this.dataStore.getUserChatRooms(uid);
+    console.log(this.ws.serveClient);
+    this.ws
+      .to(clientId)
+      .emit('init', formateData(responseTypes.init, { user, chatRooms }));
   }
 
   @SubscribeMessage(responseTypes.getRecord)
