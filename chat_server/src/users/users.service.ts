@@ -32,19 +32,18 @@ export class UsersService {
     throw new HttpException('密码错误', HttpStatus.BAD_REQUEST);
   }
 
-  findAll() {
-    return `This action returns all users`;
-  }
+  findChatRooms(uid: string, name: string) {
+    console.log(uid, name);
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
-  }
-
-  // update(id: number, updateUserDto: UpdateUserDto) {
-  //   return `This action updates a #${id} user`;
-  // }
-
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+    const chatRoomSObj = store.getAllChatRooms();
+    const chatRoomsList = Object.values(chatRoomSObj)
+      .filter((room) => {
+        return room.name.includes(name);
+      })
+      .map((room) => {
+        const joined = !!room.users[uid];
+        return { roomId: room.id, name: room.name, joined };
+      });
+    return chatRoomsList;
   }
 }

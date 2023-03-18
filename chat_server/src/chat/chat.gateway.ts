@@ -88,9 +88,13 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
   ): void {
     const { roomId } = data;
     const record = this.dataStore.getChatRecord(roomId);
+    const result = {
+      record,
+      roomId,
+    };
     client.emit(
       responseTypes.getRecord,
-      formateData(responseTypes.getRecord, record),
+      formateData(responseTypes.getRecord, result),
     );
   }
 }
