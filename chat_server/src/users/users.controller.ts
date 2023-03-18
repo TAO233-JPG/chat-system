@@ -33,13 +33,13 @@ export class UsersController {
   @Post('chatRoom')
   createChatRoom(@Body() createChatRoom: CreateChatRoomDto) {
     const res = this.usersService.createChatRoom(createChatRoom);
-    this.chatGateWay.updateChatRooms(createChatRoom.uid);
+    this.chatGateWay.updateChatRooms(createChatRoom.uid, res.id);
     return res;
   }
   @Post('joinRoom')
   joinChatRoom(@Body() joinChatRoom: JoinChatRoomDto) {
     const res = this.usersService.joinChatRoom(joinChatRoom);
-    this.chatGateWay.updateChatRooms(joinChatRoom.uid);
+    this.chatGateWay.updateChatRooms(joinChatRoom.uid, joinChatRoom.roomId);
     return res;
   }
 }

@@ -106,6 +106,6 @@ export default class DataStore {
   // 获取聊天记录
   getChatRecord(chatRoomId: string) {
     const { chatRooms } = this.data;
-    return chatRooms[chatRoomId].chatRecord;
+    return chatRooms[chatRoomId]?.chatRecord ?? [];
   }
 }

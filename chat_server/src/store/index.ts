@@ -6,7 +6,7 @@ const u1 = {
   name: 'user-1',
   chatRoomId: ['chatRoom-1', 'chatRoom-3'],
   clientId: undefined,
-  password: '1234455',
+  password: '123',
 };
 const u2 = {
   id: 'u2',

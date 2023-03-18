@@ -73,6 +73,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
       content: message,
       date: dayjs(),
     });
+    console.log('---0-');
 
     this.ws
       .to(roomId)
@@ -82,14 +83,13 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
       );
   }
 
-  updateChatRooms(uid: string) {
+  updateChatRooms(uid: string, roomId: string) {
     const user = this.dataStore.getUser(uid);
     const clientId = user.clientId;
     const chatRooms = this.dataStore.getUserChatRooms(uid);
-    console.log(this.ws.serveClient);
-    this.ws
-      .to(clientId)
-      .emit('init', formateData(responseTypes.init, { user, chatRooms }));
+    const client = this.ws.sockets.sockets.get(clientId);
+    client.join(roomId);
+    client.emit('init', formateData(responseTypes.init, { user, chatRooms }));
   }
 
   @SubscribeMessage(responseTypes.getRecord)
