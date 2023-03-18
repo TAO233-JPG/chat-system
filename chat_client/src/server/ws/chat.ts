@@ -22,11 +22,16 @@ class Chat {
     this.id = id
   }
 
-  public connect() {
+  public connect(id: string) {
+    if (this.chat) {
+      this.chat.close()
+      this.chat = null
+    }
+
     this.chat = io('http://localhost:3000', {
       path: '/chat',
       auth: {
-        id: this.id
+        id: id
       }
     })
   }

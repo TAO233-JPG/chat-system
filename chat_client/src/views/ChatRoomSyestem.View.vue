@@ -19,20 +19,21 @@ import ChatInterface from '@/components/ChatInterface/ChatInterface.vue'
 import { useRouter } from 'vue-router'
 import useUserStore from '@/stores/user/user'
 import Chat from '@/server/ws/chat'
-import type { IinitData, Imessage, IgetRecordData } from '@/stores/type'
+import type { IinitData, IgetRecordData } from '@/stores/type'
 const userStore = useUserStore()
 const router = useRouter()
 const id = userStore.user?.id!
-const chat = Chat.getInstance(id)
-chat.connect()
+
+const chat = Chat.getInstance()
+chat.connect(id)
 
 chat.listenEvent<IinitData>('init', (data) => {
+  console.log(data, 'init')
   if (data?.status === 'fail') {
     chat.close()
     router.replace('/')
     return
   }
-  console.log(data, 'init')
   userStore.setChatRooms(data.data.chatRooms)
 })
 chat.listenEvent<IgetRecordData>('getRecord', (data) => {
