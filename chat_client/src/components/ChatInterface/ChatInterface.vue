@@ -7,7 +7,7 @@
         <el-icon size="18"><Management /></el-icon>
       </span>
     </header>
-    <el-scrollbar>
+    <el-scrollbar ref="scrollbar">
       <div class="info-display"><ChatInfoDisplayArea /></div>
     </el-scrollbar>
     <MessageInputBox />
@@ -18,12 +18,24 @@ import MessageInputBox from '../MessageInputBox/MessageInputBox.vue'
 import ChatInfoDisplayArea from '../ChatInfoDisplayArea/ChatInfoDisplayArea.vue'
 import { Management } from '@element-plus/icons-vue'
 import useUserStore from '@/stores/user/user'
-import { computed } from 'vue'
+import { computed, nextTick, ref, watch } from 'vue'
 const userStore = useUserStore()
-
+const scrollbar = ref<any>(null)
 const title = computed(() => {
   return userStore.currentChatRoom?.name ?? '请打开一个聊天室'
 })
+
+watch(
+  () => userStore.currentChatRoom?.chatRecord,
+  () => {
+    if (scrollbar.value) {
+      nextTick(() => {
+        const scroll = (scrollbar.value.wrapRef as HTMLElement).children[0]
+        scrollbar.value.scrollTo(0, scroll.scrollHeight)
+      })
+    }
+  }
+)
 </script>
 <style lang="scss" scoped>
 .chat-interface {
