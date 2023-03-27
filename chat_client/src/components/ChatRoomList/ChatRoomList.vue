@@ -31,15 +31,12 @@
 <script setup lang="ts">
 import ListItem from '../ListItem/ListItem.vue'
 import SearchInputBox from '../SearchInputBox/SearchInputBox.vue'
-import { Search, Notification, User, ChatDotRound } from '@element-plus/icons-vue'
+import { Notification, User, ChatDotRound } from '@element-plus/icons-vue'
 import { computed, ref } from 'vue'
 import type { ChatRoomTypeT } from '@/stores/type'
 import useUserStore from '@/stores/user/user'
-import Chat from '@/server/ws/chat'
-const chat = Chat.getInstance()
+import { chat } from '@/server'
 const userStore = useUserStore()
-
-const input = ref('')
 
 const roomType = ref<ChatRoomTypeT>('Group')
 function changeType(e: MouseEvent): void {

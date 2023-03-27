@@ -11,9 +11,9 @@
 </template>
 <script setup lang="ts">
 import { ref } from 'vue'
-import Chat from '@/server/ws/chat'
+import { chat } from '@/server/index'
 import useUserStore from '@/stores/user/user'
-const chat = Chat.getInstance()
+
 const userStore = useUserStore()
 const textarea = ref('')
 interface Isender {

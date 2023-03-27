@@ -13,25 +13,24 @@ interface Tlistener<T> {
 
 class Chat {
   private chat: Socket | null = null
-  private id: string
+  private id: string = ''
   static instance: Chat | null = null
-  private constructor(id: string) {
-    // this.listenEvent<Imessage>('init', (data) => {
-    //   console.log(data)
-    // })
-    this.id = id
-  }
+  private constructor() {}
 
-  public connect(id: string) {
+  public connect(id: string | undefined) {
+    if (!id) {
+      console.error('connet id is undefined')
+      return
+    }
+    this.id = id
     if (this.chat) {
       this.chat.close()
-      this.chat = null
     }
 
     this.chat = io('http://localhost:3000', {
       path: '/chat',
       auth: {
-        id: id
+        id: this.id
       }
     })
   }
@@ -49,15 +48,13 @@ class Chat {
 
   public close() {
     this.chat?.close()
+    this.chat = null
+    console.log('chat close!')
   }
 
-  private sendMessage(data: Imessage) {
-    this.emitEvent('sendMessage', data)
-  }
-
-  static getInstance(id: string = '') {
+  static getInstance() {
     if (!Chat.instance) {
-      Chat.instance = new Chat(id)
+      Chat.instance = new Chat()
     }
 
     return Chat.instance
